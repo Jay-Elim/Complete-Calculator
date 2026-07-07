@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>💱 Universal Converter</title>
+    
+    <!-- Open Graph Meta Tags for X/Twitter -->
+    <meta property="og:title" content="Universal Converter - Forex & Units" />
+    <meta property="og:description" content="Convert currencies with live rates, plus length, weight, temperature, and more! 💱" />
+    <meta property="og:image" content="https://jay-elim.github.io/forex-calculator/preview.png" />
+    <meta property="og:url" content="https://jay-elim.github.io/forex-calculator/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@jayelimpro" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json" />
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a2e;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-amber: #f59e0b;
+            --text-white: #ffffff;
+            --text-gray: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            color: var(--text-white);
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .converter-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+
+        .converter-card .title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-group input,
+        .input-group select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--accent-green);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
+
+        .input-group select {
+            appearance: none;
+            cursor: pointer;
+            min-width: 80px;
+        }
+
+        .input-group select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .result {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent-green);
+            text-align: center;
+            padding: 16px 0 8px 0;
+            font-feature-settings: "tnum";
+        }
+
+        .result-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            text-align: center;
+        }
+
+        .swap-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .swap-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: rotate(180deg);
+        }
+
+        .swap-btn:active {
+            transform: rotate(180deg) scale(0.9);
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0 16px 0;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-gray);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .category-tab.active {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .category-tab:active {
+            transform: scale(0.95);
+        }
+
+        .rate-info {
+            font-size: 12px;
+            color: var(--text-gray);
+            text-align: center;
+            padding: 8px;
+        }
+
+        .rate-info span {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .conversion-history {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-gray);
+            padding: 4px 0;
+        }
+
+        .history-item .value {
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .input-group input,
+            .input-group select {
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+            .result {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-white tracking-tight">💱 Converter</h1>
+                <p class="text-sm text-gray-400">Live rates • Everything in one place</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">🟢 Live</span>
+                <span class="live-indicator"></span>
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs" id="categoryTabs">
+            <button class="category-tab active" data-category="forex">💱 Forex</button>
+            <button class="category-tab" data-category="length">📏 Length</button>
+            <button class="category-tab" data-category="weight">⚖️ Weight</button>
+            <button class="category-tab" data-category="temperature">🌡️ Temp</button>
+            <button class="category-tab" data-category="area">📐 Area</button>
+            <button class="category-tab" data-category="volume">🧊 Volume</button>
+            <button class="category-tab" data-category="speed">🚀 Speed</button>
+        </div>
+
+        <!-- Converter Card -->
+        <div class="converter-card" id="converterCard">
+            <div class="title" id="converterTitle">💱 Currency Converter</div>
+
+            <!-- From -->
+            <div class="input-group mb-3">
+                <input type="number" id="fromValue" placeholder="0" step="any" value="1" />
+                <select id="fromUnit"></select>
+            </div>
+
+            <!-- Swap -->
+            <div class="flex justify-center my-2">
+                <button class="swap-btn" id="swapBtn">⇄</button>
+            </div>
+
+            <!-- To -->
+            <div class="input-group">
+                <input type="number" id="toValue" placeholder="0" step="any" readonly />
+                <select id="toUnit"></select>
+            </div>
+
+            <!-- Result Display -->
+            <div class="result" id="resultDisplay">-</div>
+            <div class="result-label" id="resultLabel">Enter a value to convert</div>
+
+            <!-- Rate Info -->
+            <div class="rate-info" id="rateInfo">💱 1 <span id="rateFromLabel">USD</span> = <span id="rateToLabel">EUR</span> <span id="rateValue">-</span></div>
+
+            <!-- Conversion History -->
+            <div class="conversion-history" id="historyContainer">
+                <div class="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>Recent conversions</span>
+                    <button id="clearHistory" class="text-red-500 hover:text-red-400 text-[10px]">Clear</button>
+                </div>
+                <div id="historyList">
+                    <div class="history-item"><span class="text-gray-600">No conversions yet</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div class="text-center text-[10px] text-gray-600 mt-4">
+            💱 Live forex rates via ExchangeRate-API • Updated every 5 minutes
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
