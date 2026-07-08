@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>💱 Universal Converter</title>
+    <title>💱 Jayel's Universal Converter</title>
     
     <!-- Open Graph Meta Tags for X/Twitter -->
-    <meta property="og:title" content="Universal Converter - Forex & Units" />
-    <meta property="og:description" content="Convert currencies with live rates, plus length, weight, temperature, and more! 💱" />
+    <meta property="og:title" content="Jayel's Universal Converter - Forex & Units" />
+    <meta property="og:description" content="Convert currencies with live rates, plus length, weight, temperature, and more! Built by @jayelimpro 💱" />
     <meta property="og:image" content="https://jay-elim.github.io/forex-calculator/preview.png" />
     <meta property="og:url" content="https://jay-elim.github.io/forex-calculator/" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@jayelimpro" />
+    <meta name="twitter:site" content="@jayelimpro" />
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#0a0a0a" />
@@ -21,28 +22,55 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="manifest" href="manifest.json" />
     
+    <!-- Font Awesome for X icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    
     <style>
+        /* ===== CSS Variables for Theme ===== */
         :root {
             --bg-primary: #0a0a0a;
             --bg-secondary: #1a1a2e;
+            --bg-card: rgba(255,255,255,0.03);
+            --bg-input: rgba(255,255,255,0.05);
+            --border-color: rgba(255,255,255,0.06);
+            --border-input: rgba(255,255,255,0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: rgba(255,255,255,0.3);
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
             --accent-amber: #f59e0b;
-            --text-white: #ffffff;
-            --text-gray: #94a3b8;
+            --shadow-color: rgba(0,0,0,0.3);
+            --calc-bg: #0d1117;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0,0,0,0.03);
+            --bg-input: rgba(0,0,0,0.05);
+            --border-color: rgba(0,0,0,0.08);
+            --border-input: rgba(0,0,0,0.1);
+            --text-primary: #0a0a0a;
+            --text-secondary: #475569;
+            --text-muted: rgba(0,0,0,0.3);
+            --shadow-color: rgba(0,0,0,0.1);
+            --calc-bg: #f1f5f9;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
 
         body {
             background: var(--bg-primary);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
-            color: var(--text-white);
+            color: var(--text-primary);
         }
 
         .container {
@@ -52,18 +80,19 @@
         }
 
         .converter-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 24px;
             padding: 20px;
             backdrop-filter: blur(10px);
             margin-bottom: 16px;
+            box-shadow: 0 4px 24px var(--shadow-color);
         }
 
         .converter-card .title {
             font-size: 14px;
             font-weight: 700;
-            color: var(--text-gray);
+            color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
@@ -77,11 +106,11 @@
 
         .input-group input,
         .input-group select {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
             border-radius: 12px;
             padding: 12px 14px;
-            color: white;
+            color: var(--text-primary);
             font-size: 16px;
             outline: none;
             transition: border-color 0.2s;
@@ -94,7 +123,7 @@
         }
 
         .input-group input::placeholder {
-            color: rgba(255,255,255,0.3);
+            color: var(--text-muted);
         }
 
         .input-group select {
@@ -104,8 +133,8 @@
         }
 
         .input-group select option {
-            background: #1a1a2e;
-            color: white;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
         }
 
         .result {
@@ -119,17 +148,17 @@
 
         .result-label {
             font-size: 12px;
-            color: var(--text-gray);
+            color: var(--text-secondary);
             text-align: center;
         }
 
         .swap-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            color: white;
+            color: var(--text-primary);
             font-size: 18px;
             cursor: pointer;
             transition: all 0.2s;
@@ -140,7 +169,7 @@
         }
 
         .swap-btn:hover {
-            background: rgba(255,255,255,0.1);
+            background: var(--border-input);
             transform: rotate(180deg);
         }
 
@@ -164,9 +193,9 @@
         .category-tab {
             padding: 8px 16px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.03);
-            color: var(--text-gray);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -187,13 +216,13 @@
 
         .rate-info {
             font-size: 12px;
-            color: var(--text-gray);
+            color: var(--text-secondary);
             text-align: center;
             padding: 8px;
         }
 
         .rate-info span {
-            color: var(--text-white);
+            color: var(--text-primary);
             font-weight: 600;
         }
 
@@ -214,7 +243,7 @@
 
         .conversion-history {
             margin-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid var(--border-color);
             padding-top: 12px;
         }
 
@@ -222,13 +251,248 @@
             display: flex;
             justify-content: space-between;
             font-size: 13px;
-            color: var(--text-gray);
+            color: var(--text-secondary);
             padding: 4px 0;
         }
 
         .history-item .value {
-            color: var(--text-white);
+            color: var(--text-primary);
             font-weight: 600;
+        }
+
+        /* Main Tabs (Converter/Calculator) */
+        .main-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .main-tab {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .main-tab.active {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+
+        .main-tab:hover:not(.active) {
+            background: var(--border-input);
+        }
+
+        .main-panel {
+            display: none;
+        }
+
+        .main-panel.active {
+            display: block;
+        }
+
+        /* Calculator Styles */
+        .calc-display {
+            background: var(--calc-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: right;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-input);
+            min-height: 4rem;
+            word-break: break-all;
+            font-feature-settings: "tnum";
+            color: var(--text-primary);
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calc-grid button {
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: 0.15s;
+            font-weight: 600;
+        }
+
+        .calc-grid button:hover {
+            background: var(--border-input);
+        }
+
+        .calc-grid button:active {
+            transform: scale(0.95);
+        }
+
+        .calc-grid .op {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .calc-grid .op:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        .calc-grid .eq {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .calc-grid .eq:hover {
+            background: #059669;
+        }
+
+        .calc-grid .clear {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .calc-grid .clear:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .calc-grid .span-two {
+            grid-column: span 2;
+        }
+
+        /* Footer / Brand */
+        .footer-brand {
+            text-align: center;
+            padding: 16px 0 8px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 12px;
+        }
+
+        .footer-brand .brand-name {
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 16px;
+        }
+
+        .footer-brand .brand-handle {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .footer-brand .brand-handle i {
+            color: #1da1f2;
+            margin-right: 4px;
+        }
+
+        .share-x-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1da1f2;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .share-x-btn:hover {
+            background: #1a8cd8;
+            transform: scale(1.02);
+        }
+
+        .share-x-btn i {
+            font-size: 16px;
+        }
+
+        /* ===== THEME TOGGLE SWITCH ===== */
+        .theme-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle-wrapper .toggle-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .theme-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--text-secondary);
+            border-radius: 34px;
+            transition: 0.3s;
+        }
+
+        .theme-slider::before {
+            content: "🌙";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            line-height: 1;
+        }
+
+        .theme-switch input:checked + .theme-slider {
+            background-color: var(--accent-green);
+        }
+
+        .theme-switch input:checked + .theme-slider::before {
+            content: "☀️";
+            transform: translateX(22px);
+        }
+
+        /* Light theme specific overrides for toggle */
+        [data-theme="light"] .theme-slider::before {
+            background-color: var(--bg-primary);
+        }
+
+        [data-theme="light"] .theme-switch input:checked + .theme-slider {
+            background-color: var(--accent-amber);
         }
 
         @media (max-width: 480px) {
@@ -240,81 +504,307 @@
             .result {
                 font-size: 24px;
             }
+            .calc-grid button {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+            .calc-display {
+                font-size: 1.6rem;
+                min-height: 3.5rem;
+            }
+            .theme-switch {
+                width: 40px;
+                height: 22px;
+            }
+            .theme-slider::before {
+                height: 16px;
+                width: 16px;
+                font-size: 10px;
+            }
+            .theme-switch input:checked + .theme-slider::before {
+                transform: translateX(18px);
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Header -->
+        <!-- Header with Brand & Theme Toggle -->
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h1 class="text-2xl font-bold text-white tracking-tight">💱 Converter</h1>
-                <p class="text-sm text-gray-400">Live rates • Everything in one place</p>
+                <h1 class="text-2xl font-bold tracking-tight" style="color: var(--text-primary);">💱 Jayel's <span style="color: var(--accent-green);">Converter</span></h1>
+                <p class="text-sm" style="color: var(--text-secondary);">Built by <span style="color: var(--text-primary); font-weight: 600;">@jayelimpro</span> • Live rates</p>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-gray-500">🟢 Live</span>
+            <div class="flex items-center gap-3">
+                <span class="text-xs" style="color: var(--text-secondary);">🟢 Live</span>
                 <span class="live-indicator"></span>
+                <div class="theme-toggle-wrapper">
+                    <span class="toggle-label">🌙</span>
+                    <label class="theme-switch">
+                        <input type="checkbox" id="themeToggle" />
+                        <span class="theme-slider"></span>
+                    </label>
+                    <span class="toggle-label">☀️</span>
+                </div>
             </div>
         </div>
 
-        <!-- Category Tabs -->
-        <div class="category-tabs" id="categoryTabs">
-            <button class="category-tab active" data-category="forex">💱 Forex</button>
-            <button class="category-tab" data-category="length">📏 Length</button>
-            <button class="category-tab" data-category="weight">⚖️ Weight</button>
-            <button class="category-tab" data-category="temperature">🌡️ Temp</button>
-            <button class="category-tab" data-category="area">📐 Area</button>
-            <button class="category-tab" data-category="volume">🧊 Volume</button>
-            <button class="category-tab" data-category="speed">🚀 Speed</button>
+        <!-- Main Tabs: Converter | Calculator -->
+        <div class="main-tabs">
+            <button class="main-tab active" data-panel="converter">🔄 Converter</button>
+            <button class="main-tab" data-panel="calculator">🧮 Calculator</button>
         </div>
 
-        <!-- Converter Card -->
-        <div class="converter-card" id="converterCard">
-            <div class="title" id="converterTitle">💱 Currency Converter</div>
-
-            <!-- From -->
-            <div class="input-group mb-3">
-                <input type="number" id="fromValue" placeholder="0" step="any" value="1" />
-                <select id="fromUnit"></select>
+        <!-- ============ CONVERTER PANEL ============ -->
+        <div id="converterPanel" class="main-panel active">
+            <!-- Category Tabs -->
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-tab active" data-category="forex">💱 Forex</button>
+                <button class="category-tab" data-category="length">📏 Length</button>
+                <button class="category-tab" data-category="weight">⚖️ Weight</button>
+                <button class="category-tab" data-category="temperature">🌡️ Temp</button>
+                <button class="category-tab" data-category="area">📐 Area</button>
+                <button class="category-tab" data-category="volume">🧊 Volume</button>
+                <button class="category-tab" data-category="speed">🚀 Speed</button>
             </div>
 
-            <!-- Swap -->
-            <div class="flex justify-center my-2">
-                <button class="swap-btn" id="swapBtn">⇄</button>
-            </div>
+            <!-- Converter Card -->
+            <div class="converter-card" id="converterCard">
+                <div class="title" id="converterTitle">💱 Currency Converter</div>
 
-            <!-- To -->
-            <div class="input-group">
-                <input type="number" id="toValue" placeholder="0" step="any" readonly />
-                <select id="toUnit"></select>
-            </div>
-
-            <!-- Result Display -->
-            <div class="result" id="resultDisplay">-</div>
-            <div class="result-label" id="resultLabel">Enter a value to convert</div>
-
-            <!-- Rate Info -->
-            <div class="rate-info" id="rateInfo">💱 1 <span id="rateFromLabel">USD</span> = <span id="rateToLabel">EUR</span> <span id="rateValue">-</span></div>
-
-            <!-- Conversion History -->
-            <div class="conversion-history" id="historyContainer">
-                <div class="flex justify-between text-xs text-gray-500 mb-1">
-                    <span>Recent conversions</span>
-                    <button id="clearHistory" class="text-red-500 hover:text-red-400 text-[10px]">Clear</button>
+                <!-- From -->
+                <div class="input-group mb-3">
+                    <input type="number" id="fromValue" placeholder="0" step="any" value="1" />
+                    <select id="fromUnit"></select>
                 </div>
-                <div id="historyList">
-                    <div class="history-item"><span class="text-gray-600">No conversions yet</span></div>
+
+                <!-- Swap -->
+                <div class="flex justify-center my-2">
+                    <button class="swap-btn" id="swapBtn">⇄</button>
+                </div>
+
+                <!-- To -->
+                <div class="input-group">
+                    <input type="number" id="toValue" placeholder="0" step="any" readonly />
+                    <select id="toUnit"></select>
+                </div>
+
+                <!-- Result Display -->
+                <div class="result" id="resultDisplay">-</div>
+                <div class="result-label" id="resultLabel">Enter a value to convert</div>
+
+                <!-- Rate Info -->
+                <div class="rate-info" id="rateInfo">💱 1 <span id="rateFromLabel">USD</span> = <span id="rateToLabel">EUR</span> <span id="rateValue">-</span></div>
+
+                <!-- Conversion History -->
+                <div class="conversion-history" id="historyContainer">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span style="color: var(--text-secondary);">Recent conversions</span>
+                        <button id="clearHistory" class="text-red-500 hover:text-red-400 text-[10px]" style="color: #ef4444;">Clear</button>
+                    </div>
+                    <div id="historyList">
+                        <div class="history-item"><span style="color: var(--text-secondary); opacity: 0.6;">No conversions yet</span></div>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- ============ CALCULATOR PANEL ============ -->
+        <div id="calculatorPanel" class="main-panel">
+            <div class="converter-card">
+                <div class="title">🧮 Jayel's Calculator</div>
+                
+                <div class="calc-display" id="calcDisplay">0</div>
+                
+                <div class="calc-grid">
+                    <button class="clear" data-action="clear">C</button>
+                    <button class="op" data-action="delete">⌫</button>
+                    <button class="op" data-action="operator">/</button>
+                    <button class="op" data-action="operator">×</button>
+                    
+                    <button data-action="number">7</button>
+                    <button data-action="number">8</button>
+                    <button data-action="number">9</button>
+                    <button class="op" data-action="operator">−</button>
+                    
+                    <button data-action="number">4</button>
+                    <button data-action="number">5</button>
+                    <button data-action="number">6</button>
+                    <button class="op" data-action="operator">+</button>
+                    
+                    <button data-action="number">1</button>
+                    <button data-action="number">2</button>
+                    <button data-action="number">3</button>
+                    <button class="eq" data-action="calculate">=</button>
+                    
+                    <button data-action="number" class="span-two">0</button>
+                    <button data-action="number">.</button>
+                    <button class="eq" data-action="calculate">=</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ FOOTER WITH X SHARE ============ -->
+        <div class="footer-brand">
+            <div class="brand-name">✦ Jayel's Universal Converter ✦</div>
+            <div class="brand-handle">
+                <i class="fa-brands fa-x-twitter"></i> Built with ❤️ by @jayelimpro
+            </div>
+            <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20awesome%20Universal%20Converter%20built%20by%20%40jayelimpro%20%F0%9F%92%B1%0AConvert%20currencies%2C%20length%2C%20weight%2C%20temperature%20and%20more!%0A%0A%F0%9F%94%97%20https%3A%2F%2Fjay-elim.github.io%2Fforex-calculator%2F" 
+               target="_blank" 
+               class="share-x-btn">
+                <i class="fa-brands fa-x-twitter"></i> Share on X
+            </a>
         </div>
 
         <!-- Quick Reference -->
-        <div class="text-center text-[10px] text-gray-600 mt-4">
+        <div class="text-center text-[10px] mt-2" style="color: var(--text-secondary); opacity: 0.6;">
             💱 Live forex rates via ExchangeRate-API • Updated every 5 minutes
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // ============ THEME TOGGLE ============
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            htmlElement.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'light') {
+                themeToggle.checked = true;
+            }
+        }
+
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // ============ MAIN TAB SWITCHING ============
+        document.querySelectorAll('.main-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Update tab states
+                document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update panels
+                const panelId = tab.dataset.panel + 'Panel';
+                document.querySelectorAll('.main-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById(panelId).classList.add('active');
+                
+                // Recalculate if coming back to converter
+                if (panelId === 'converterPanel') {
+                    const fromVal = document.getElementById('fromValue');
+                    if (fromVal && fromVal.value && fromVal.value !== '') {
+                        if (typeof convert === 'function') convert();
+                    }
+                }
+            });
+        });
+
+        // ============ CALCULATOR LOGIC ============
+        (function() {
+            const display = document.getElementById('calcDisplay');
+            let current = '0';
+            let previous = '';
+            let operation = null;
+            let resetNext = false;
+
+            function updateDisplay() {
+                display.textContent = current || '0';
+            }
+
+            function inputDigit(digit) {
+                if (resetNext) {
+                    current = digit;
+                    resetNext = false;
+                } else {
+                    if (digit === '.' && current.includes('.')) return;
+                    if (current === '0' && digit !== '.') current = digit;
+                    else current += digit;
+                }
+                updateDisplay();
+            }
+
+            function inputOperator(op) {
+                if (operation && !resetNext) calculate();
+                previous = current;
+                operation = op;
+                resetNext = true;
+            }
+
+            function calculate() {
+                if (!operation || previous === '') return;
+                const prev = parseFloat(previous);
+                const curr = parseFloat(current);
+                let result;
+                switch (operation) {
+                    case '+': result = prev + curr; break;
+                    case '−': result = prev - curr; break;
+                    case '×': result = prev * curr; break;
+                    case '/': result = curr !== 0 ? prev / curr : 'Error'; break;
+                    default: return;
+                }
+                current = typeof result === 'number' ? String(parseFloat(result.toFixed(10))) : result;
+                operation = null;
+                previous = '';
+                resetNext = true;
+                updateDisplay();
+            }
+
+            function clearAll() {
+                current = '0';
+                previous = '';
+                operation = null;
+                resetNext = false;
+                updateDisplay();
+            }
+
+            function deleteLast() {
+                if (current.length > 1) current = current.slice(0, -1);
+                else current = '0';
+                updateDisplay();
+            }
+
+            // Event listeners for calculator buttons
+            document.querySelectorAll('.calc-grid button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const action = btn.dataset.action;
+                    if (action === 'number') inputDigit(btn.textContent);
+                    else if (action === 'operator') inputOperator(btn.textContent);
+                    else if (action === 'calculate') calculate();
+                    else if (action === 'clear') clearAll();
+                    else if (action === 'delete') deleteLast();
+                });
+            });
+
+            // Keyboard support
+            document.addEventListener('keydown', (e) => {
+                const calcPanel = document.getElementById('calculatorPanel');
+                if (!calcPanel.classList.contains('active')) return;
+
+                const key = e.key;
+                if (key >= '0' && key <= '9') inputDigit(key);
+                else if (key === '.') inputDigit('.');
+                else if (key === '+') inputOperator('+');
+                else if (key === '-') inputOperator('−');
+                else if (key === '*') inputOperator('×');
+                else if (key === '/') { e.preventDefault(); inputOperator('/'); }
+                else if (key === 'Enter' || key === '=') { e.preventDefault(); calculate(); }
+                else if (key === 'Backspace') deleteLast();
+                else if (key === 'Escape') clearAll();
+            });
+        })();
+    </script>
 </body>
 </html>

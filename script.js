@@ -512,6 +512,7 @@ async function init() {
     console.log('💱 Universal Converter loaded!');
     console.log('📊 Categories:', Object.keys(UNITS).join(', '));
     console.log('🔄 Forex rates updated:', Object.keys(state.forexRates).length, 'currencies');
+    console.log('🧮 Calculator ready!');
 }
 
 // Start the app
